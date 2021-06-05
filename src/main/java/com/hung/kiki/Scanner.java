@@ -37,11 +37,11 @@ public class Scanner {
     private int current = 0;
     private int line = 1;
 
-    Scanner(String source) {
+    public Scanner(String source) {
         this.source = source;
     }
 
-    List<Token> scanTokens() {
+    public List<Token> scanTokens() {
         while (!isAtEnd()) {
             // We are at the beginning of the next lexeme.
             start = current;
@@ -100,7 +100,9 @@ public class Scanner {
             case '/':
                 if (match('/')) {
                     // A comment goes until the end of the line.
-                    while (peek() != '\n' && !isAtEnd()) advance();
+                    while (peek() != '\n' && !isAtEnd()) {
+                        advance();
+                    }
                 } else {
                     addToken(SLASH);
                 }
