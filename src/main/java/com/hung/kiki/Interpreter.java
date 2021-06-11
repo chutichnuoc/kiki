@@ -1,10 +1,33 @@
 package com.hung.kiki;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
-    private Environment environment = new Environment();
+    final Environment globals = new Environment();
+    private Environment environment = globals;
+
+    public Interpreter() {
+        globals.define(
+                "clock",
+                new KikiCallable() {
+                    @Override
+                    public int arity() {
+                        return 0;
+                    }
+
+                    @Override
+                    public Object call(Interpreter interpreter, List<Object> arguments) {
+                        return (double) System.currentTimeMillis() / 1000.0;
+                    }
+
+                    @Override
+                    public String toString() {
+                        return "<native fn>";
+                    }
+                });
+    }
 
     public void interpret(List<Stmt> statements) {
         try {
@@ -107,6 +130,33 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Object visitCallExpr(Expr.Call expr) {
+        Object callee = evaluate(expr.callee);
+
+        List<Object> arguments = new ArrayList<>();
+        for (Expr argument : expr.arguments) {
+            arguments.add(evaluate(argument));
+        }
+
+        if (!(callee instanceof KikiCallable)) {
+            throw new RuntimeError(expr.paren, "Can only call functions and classes.");
+        }
+
+        KikiCallable function = (KikiCallable) callee;
+        if (arguments.size() != function.arity()) {
+            throw new RuntimeError(
+                    expr.paren,
+                    "Expected "
+                            + function.arity()
+                            + " arguments but got "
+                            + arguments.size()
+                            + ".");
+        }
+
+        return function.call(this, arguments);
+    }
+
+    @Override
     public Object visitAssignExpr(Expr.Assign expr) {
         Object value = evaluate(expr.value);
         environment.assign(expr.name, value);
@@ -125,6 +175,13 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
     }
 
     @Override
+    public Void visitFunctionStmt(Stmt.Function stmt) {
+        KikiFunction function = new KikiFunction(stmt, environment);
+        environment.define(stmt.name.lexeme, function);
+        return null;
+    }
+
+    @Override
     public Void visitIfStmt(Stmt.If stmt) {
         if (isTruthy(evaluate(stmt.condition))) {
             execute(stmt.thenBranch);
@@ -139,6 +196,16 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
         Object value = evaluate(stmt.expression);
         System.out.println(stringify(value));
         return null;
+    }
+
+    @Override
+    public Void visitReturnStmt(Stmt.Return stmt) {
+        Object value = null;
+        if (stmt.value != null) {
+            value = evaluate(stmt.value);
+        }
+
+        throw new Return(value);
     }
 
     @Override
