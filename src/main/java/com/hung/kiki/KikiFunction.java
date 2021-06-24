@@ -7,9 +7,18 @@ public class KikiFunction implements KikiCallable {
     private final Stmt.Function declaration;
     private final Environment closure;
 
-    KikiFunction(Stmt.Function declaration, Environment closure) {
+    private final boolean isInitializer;
+
+    KikiFunction(Stmt.Function declaration, Environment closure, boolean isInitializer) {
+        this.isInitializer = isInitializer;
         this.closure = closure;
         this.declaration = declaration;
+    }
+
+    KikiFunction bind(KikiInstance instance) {
+        Environment environment = new Environment(closure);
+        environment.define("this", instance);
+        return new KikiFunction(declaration, environment, isInitializer);
     }
 
     @Override
@@ -27,7 +36,15 @@ public class KikiFunction implements KikiCallable {
         try {
             interpreter.executeBlock(declaration.body, environment);
         } catch (Return returnValue) {
+            if (isInitializer) {
+                return closure.getAt(0, "this");
+            }
+
             return returnValue.value;
+        }
+
+        if (isInitializer) {
+            return closure.getAt(0, "this");
         }
         return null;
     }
