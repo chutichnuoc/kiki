@@ -6,16 +6,22 @@ import java.util.Map;
 public class KikiClass implements KikiCallable {
 
     final String name;
+    final KikiClass superclass;
     private final Map<String, KikiFunction> methods;
 
-    KikiClass(String name, Map<String, KikiFunction> methods) {
+    KikiClass(String name, KikiClass superclass, Map<String, KikiFunction> methods) {
         this.name = name;
+        this.superclass = superclass;
         this.methods = methods;
     }
 
     KikiFunction findMethod(String name) {
         if (methods.containsKey(name)) {
             return methods.get(name);
+        }
+
+        if (superclass != null) {
+            return superclass.findMethod(name);
         }
 
         return null;
