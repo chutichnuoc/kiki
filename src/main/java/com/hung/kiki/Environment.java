@@ -3,17 +3,17 @@ package com.hung.kiki;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Environment {
+class Environment {
 
     final Environment enclosing;
 
     private final Map<String, Object> values = new HashMap<>();
 
-    public Environment() {
+    Environment() {
         enclosing = null;
     }
 
-    public Environment(Environment enclosing) {
+    Environment(Environment enclosing) {
         this.enclosing = enclosing;
     }
 

@@ -29,7 +29,6 @@ public class GenerateAst {
                         "This     : Token keyword",
                         "Unary    : Token operator, Expr right",
                         "Variable : Token name"));
-
         defineAst(
                 outputDir,
                 "Stmt",

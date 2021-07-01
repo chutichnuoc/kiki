@@ -3,10 +3,10 @@ package com.hung.kiki;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KikiInstance {
+class KikiInstance {
 
-    private KikiClass klass;
     private final Map<String, Object> fields = new HashMap<>();
+    private KikiClass klass;
 
     KikiInstance(KikiClass klass) {
         this.klass = klass;

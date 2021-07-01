@@ -5,13 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
+class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
 
     final Environment globals = new Environment();
-    private Environment environment = globals;
     private final Map<Expr, Integer> locals = new HashMap<>();
+    private Environment environment = globals;
 
-    public Interpreter() {
+    Interpreter() {
         globals.define(
                 "clock",
                 new KikiCallable() {
@@ -32,7 +32,7 @@ public class Interpreter implements Expr.Visitor<Object>, Stmt.Visitor<Void> {
                 });
     }
 
-    public void interpret(List<Stmt> statements) {
+    void interpret(List<Stmt> statements) {
         try {
             for (Stmt statement : statements) {
                 execute(statement);

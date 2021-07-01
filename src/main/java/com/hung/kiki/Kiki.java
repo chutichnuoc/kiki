@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 
-public class Kiki {
+class Kiki {
 
     private static final Interpreter interpreter = new Interpreter();
     static boolean hadError = false;

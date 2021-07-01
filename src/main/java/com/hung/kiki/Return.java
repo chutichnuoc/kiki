@@ -1,6 +1,6 @@
 package com.hung.kiki;
 
-public class Return extends RuntimeException {
+class Return extends RuntimeException {
 
     final Object value;
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 import static com.hung.kiki.TokenType.*;
 
-public class Scanner {
+class Scanner {
 
     private static final Map<String, TokenType> keywords;
 
@@ -37,11 +37,11 @@ public class Scanner {
     private int current = 0;
     private int line = 1;
 
-    public Scanner(String source) {
+    Scanner(String source) {
         this.source = source;
     }
 
-    public List<Token> scanTokens() {
+    List<Token> scanTokens() {
         while (!isAtEnd()) {
             // We are at the beginning of the next lexeme.
             start = current;

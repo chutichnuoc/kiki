@@ -6,14 +6,11 @@ import java.util.List;
 
 import static com.hung.kiki.TokenType.*;
 
-public class Parser {
-
-    private static class ParseError extends RuntimeException {}
+class Parser {
 
     private final List<Token> tokens;
     private int current = 0;
-
-    public Parser(List<Token> tokens) {
+    Parser(List<Token> tokens) {
         this.tokens = tokens;
     }
 
@@ -472,4 +469,6 @@ public class Parser {
             advance();
         }
     }
+
+    private static class ParseError extends RuntimeException {}
 }

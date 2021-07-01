@@ -5,30 +5,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
-public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
+class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
 
     private final Interpreter interpreter;
     private final Stack<Map<String, Boolean>> scopes = new Stack<>();
     private FunctionType currentFunction = FunctionType.NONE;
+    private ClassType currentClass = ClassType.NONE;
 
     Resolver(Interpreter interpreter) {
         this.interpreter = interpreter;
     }
-
-    private enum FunctionType {
-        NONE,
-        FUNCTION,
-        INITIALIZER,
-        METHOD
-    }
-
-    private enum ClassType {
-        NONE,
-        CLASS,
-        SUBCLASS
-    }
-
-    private ClassType currentClass = ClassType.NONE;
 
     void resolve(List<Stmt> statements) {
         for (Stmt statement : statements) {
@@ -304,5 +290,18 @@ public class Resolver implements Expr.Visitor<Void>, Stmt.Visitor<Void> {
                 return;
             }
         }
+    }
+
+    private enum FunctionType {
+        NONE,
+        FUNCTION,
+        INITIALIZER,
+        METHOD
+    }
+
+    private enum ClassType {
+        NONE,
+        CLASS,
+        SUBCLASS
     }
 }

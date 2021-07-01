@@ -3,7 +3,7 @@ package com.hung.kiki;
 import java.util.List;
 import java.util.Map;
 
-public class KikiClass implements KikiCallable {
+class KikiClass implements KikiCallable {
 
     final String name;
     final KikiClass superclass;

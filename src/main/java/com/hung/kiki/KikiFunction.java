@@ -2,7 +2,7 @@ package com.hung.kiki;
 
 import java.util.List;
 
-public class KikiFunction implements KikiCallable {
+class KikiFunction implements KikiCallable {
 
     private final Stmt.Function declaration;
     private final Environment closure;

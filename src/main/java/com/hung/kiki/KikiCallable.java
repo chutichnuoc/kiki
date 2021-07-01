@@ -2,7 +2,7 @@ package com.hung.kiki;
 
 import java.util.List;
 
-public interface KikiCallable {
+interface KikiCallable {
 
     int arity();
 
